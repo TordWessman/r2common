@@ -27,6 +27,11 @@
 #include "../Shared/R2Web3Log.h"
 #include "Internal/Chain_ethRequest.h"
 
+#include <time.h>
+#include <sys/time.h>
+#include <stdlib.h>
+#include <cstdio>
+
 namespace blockchain
 {
     bool Chain::Start()
@@ -176,8 +181,19 @@ namespace blockchain
             gp = gasPriceResult.Value();
         }
 
+        struct timeval start, end;
+        gettimeofday(&start, NULL);
         char *parameter = transactionFactory->GenerateSerializedData(EthereumTransactionProperties(nonce, gp, gasLimit, to, amount, (contractCall ? contractCall->AsData() : std::vector<uint8_t>()), id), from);
-        
+        gettimeofday(&end, NULL);
+
+        double elapsed = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000000.0;
+
+        char *time_spent = (char *)malloc(50);
+        sprintf(time_spent, " %.6f seconds", elapsed);
+
+        Log::m("Serialization time:", time_spent);
+        free(time_spent);
+
         Result<char *> result = MakeRequst("eth_sendRawTransaction", {cJSON_CreateString(parameter)});
         delete[] parameter;
 

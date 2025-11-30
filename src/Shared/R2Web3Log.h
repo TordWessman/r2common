@@ -47,8 +47,9 @@ namespace blockchain
     {
 
     public:
-        static const int LOG_TYPE_ERROR = 1;
+        static const int LOG_TYPE_DEBUG = 1;
         static const int LOG_TYPE_MESSAGE = 2;
+        static const int LOG_TYPE_ERROR = 3;
 
         static void m() { getInstance().log(Log::LOG_TYPE_MESSAGE); }
         static void m(const char *m1) { getInstance().log(Log::LOG_TYPE_MESSAGE, m1); }
@@ -64,9 +65,19 @@ namespace blockchain
         static void e(const char *m1, const int m2) { getInstance().log(Log::LOG_TYPE_ERROR, m1, m2); }
         static void e(const char *m1, const uint32_t m2) { getInstance().log(Log::LOG_TYPE_ERROR, m1, m2); }
 
+        static void d(const char *m1, char *m2) { getInstance().log(Log::LOG_TYPE_MESSAGE, m1, m2); }
+
         /// @brief Enable a delegate callback (class overriding `LogDelegate`) for whenever a log event is emitted.
         /// @param logDelegate set to `nullptr` in order to remove it.
         void SetDelegate(LogDelegate *logDelegate) { delegate = logDelegate; }
+
+        /// @brief Set the minimum log level threshold. Only logs at or below this level will be output.
+        /// @param level Log level threshold (LOG_TYPE_ERROR=1, LOG_TYPE_MESSAGE=2, LOG_TYPE_DEBUG=3)
+        void SetLogLevel(int level) { logLevelThreshold = level; }
+
+        /// @brief Get the current log level threshold.
+        /// @return Current log level threshold
+        int GetLogLevel() const { return logLevelThreshold; }
 
         void log(const int logType);
         void log(const int logType, const char *m1);
@@ -87,7 +98,8 @@ namespace blockchain
     private:
 
         LogDelegate *delegate;
-        Log() : delegate(nullptr) { }
+        int logLevelThreshold;
+        Log() : delegate(nullptr), logLevelThreshold(LOG_TYPE_DEBUG) { }
     };
 }
 #endif

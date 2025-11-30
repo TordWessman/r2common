@@ -32,6 +32,23 @@
 namespace blockchain
 {
 
+    uint32_t ESPNetwork::GetUTCTimestamp(const char *ntpServer)
+    {
+        configTime(0, 0, ntpServer);
+        time_t now = time(nullptr);
+        uint16_t retryCount = 0;
+        while (now < 8 * 3600 * 2 && retryCount++ < ESPNetwork_NTP_LOOP_RETRIES)
+        {
+            delay(ESPNetwork_NTP_LOOP_TIME_MS);
+            now = time(nullptr);
+        }
+        if (retryCount >= ESPNetwork_NTP_LOOP_RETRIES)
+        {
+            return 0;
+        }
+        return (uint32_t)now;
+    }
+
     ESPNetwork::ESPNetwork(const char *certificate, const bool printDebug) : printDebug(printDebug)
     {
         ntpServers = {ESPNetwork_NTP_SERVER1, ESPNetwork_NTP_SERVER2, ESPNetwork_NTP_SERVER3};

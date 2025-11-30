@@ -97,8 +97,9 @@ namespace blockchain
     std::vector<uint8_t> ContractCall::AsData() const {
 
         std::vector<uint8_t> callData = signatureHash;
+
         std::vector<std::vector<uint8_t>> params;
-        size_t dataPosition = 0;//callData.size();
+        size_t dataPosition = 0;
         for(size_t i = 0; i < arguments.size(); i++)
         {
             params.push_back(encoder.Encode(&arguments[i]));

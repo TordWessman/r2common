@@ -55,6 +55,7 @@ namespace blockchain
             THROW("Failed to initialize cURL.");
             return HttpResponse(-2);
         }
+        std::cout << "Body: " << std::endl  << body << std::endl;
 
         curl_easy_setopt(curlHandle, CURLOPT_URL, url);
         curl_easy_setopt(curlHandle, CURLOPT_CUSTOMREQUEST, httpMethod);

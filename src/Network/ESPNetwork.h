@@ -36,6 +36,7 @@
 #ifdef ESP32
 #include <HTTPClient.h>
 #include <WiFiClientSecure.h>
+#include <WiFiClient.h>
 #endif
 
 #include <vector>
@@ -57,6 +58,11 @@ namespace blockchain
     {
 
     public:
+        
+        /// @brief Retrieve current UTC timestamp from NTP server (ESP32/ESP8266)
+        /// @param ntpServer Optional NTP server address (default: pool.ntp.org)
+        /// @return UTC timestamp (seconds since epoch), or 0 on failure
+        static uint32_t GetUTCTimestamp(const char *ntpServer = ESPNetwork_NTP_SERVER1);
 
         /// @brief Instantiate network client. Please note that `Restart` needs to be called if time sync is lost due to hibernation.
         /// @param certificate Optional root certificate.
