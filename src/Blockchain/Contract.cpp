@@ -82,7 +82,7 @@ namespace blockchain
         size_t start = argumentLength - value.size();
         for (size_t i = 0; i < value.size(); i++)
         {
-            if (left) { argument->at(start - i) = value.at(value.size() - i - 1); }
+            if (left) { argument->at(start + i) = value.at(i); }
             else { argument->at(i) = value.at(i); }
         }
     }

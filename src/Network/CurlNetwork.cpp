@@ -34,6 +34,11 @@ namespace blockchain
     {
         curl_global_init(CURL_GLOBAL_DEFAULT);
         curlHandle = curl_easy_init();
+        if (curlHandle)
+        {
+            curl_easy_setopt(curlHandle, CURLOPT_SSL_VERIFYPEER, 1L);
+            curl_easy_setopt(curlHandle, CURLOPT_SSL_VERIFYHOST, 2L);
+        }
     }
 
     CurlNetwork::~CurlNetwork()
@@ -55,8 +60,6 @@ namespace blockchain
             THROW("Failed to initialize cURL.");
             return HttpResponse(-2);
         }
-        std::cout << "Body: " << std::endl  << body << std::endl;
-
         curl_easy_setopt(curlHandle, CURLOPT_URL, url);
         curl_easy_setopt(curlHandle, CURLOPT_CUSTOMREQUEST, httpMethod);
         curl_easy_setopt(curlHandle, CURLOPT_POSTFIELDS, body);
@@ -77,6 +80,7 @@ namespace blockchain
         {
             const char *error = curl_easy_strerror(res);
             response = new char[strlen(error) + 1];
+            memcpy(response, error, strlen(error));
             response[strlen(error)] = '\0';
             return HttpResponse(-1, response);
         }

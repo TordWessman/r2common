@@ -45,10 +45,10 @@ namespace blockchain
     class Chain
     {
     public:
-        Chain(NetworkFacade *networkFacade) : url(nullptr), network(networkFacade), transactionFactory(new EthereumTransactionFactory()), id(0) {}
-        Chain(char *rpcUrl, NetworkFacade *networkFacade) : url(rpcUrl), network(networkFacade), transactionFactory(new EthereumTransactionFactory()), id(0) {}
-        Chain(const char *rpcUrl, NetworkFacade *networkFacade) : url(rpcUrl | char_string::copy), network(networkFacade), transactionFactory(new EthereumTransactionFactory()), id(0) {}
-        Chain(char *rpcUrl, NetworkFacade *networkFacade, const uint32_t chainId) : url(rpcUrl), network(networkFacade), transactionFactory(new EthereumTransactionFactory()), id(chainId) {}
+        Chain(NetworkFacade *networkFacade) : url(nullptr), network(networkFacade), transactionFactory(new EthereumTransactionFactory()), id(0), started(false) {}
+        Chain(char *rpcUrl, NetworkFacade *networkFacade) : url(rpcUrl), network(networkFacade), transactionFactory(new EthereumTransactionFactory()), id(0), started(false) {}
+        Chain(const char *rpcUrl, NetworkFacade *networkFacade) : url(rpcUrl | char_string::copy), network(networkFacade), transactionFactory(new EthereumTransactionFactory()), id(0), started(false) {}
+        Chain(char *rpcUrl, NetworkFacade *networkFacade, const uint32_t chainId) : url(rpcUrl), network(networkFacade), transactionFactory(new EthereumTransactionFactory()), id(chainId), started(false) {}
 
         ~Chain() 
         {

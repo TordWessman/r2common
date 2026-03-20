@@ -131,7 +131,7 @@ namespace blockchain
                 } 
                 else
                 {
-                    value = hexCharToByte(info.value[i + 1]);
+                    value = hexCharToByte(info.value[i]);
                 }
                 bytes[(i - info.begin) / 2] = value;
             }
@@ -227,7 +227,7 @@ namespace blockchain
         char* retain_t::operator()(char *v)
         {
             char *result = new char[strlen(v) + 1];
-            memccpy(result, v, 0, strlen(v));
+            memcpy(result, v, strlen(v));
             result[strlen(v)] = '\0';
             return result;
         }
@@ -235,7 +235,7 @@ namespace blockchain
         char *copy_t::operator()(const char *v)
         {
             char *result = new char[strlen(v) + 1];
-            memccpy(result, v, 0, strlen(v));
+            memcpy(result, v, strlen(v));
             result[strlen(v)] = '\0';
             return result;
         }

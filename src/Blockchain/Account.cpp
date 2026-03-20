@@ -45,6 +45,9 @@ namespace blockchain
 
         for (size_t i = 1; i < publicKeySize + 1; i++) { publicKey.push_back(publicKeyBuffer[i]); }
 
+        volatile uint8_t *vKey = privateKeyBuffer;
+        for (size_t i = 0; i < privateKey->size(); i++) { vKey[i] = 0; }
+
         return publicKey;
     }
 

@@ -105,7 +105,7 @@ namespace blockchain
             else
             {
                 cJSON *json = cJSON_Parse(result.Value());
-                free(result.Value());
+                delete[] result.Value();
                 Result<TransactionReceipt *> transactionReceipt = TransactionReceipt::Parse(json);
                 cJSON_Delete(json);
                 return transactionReceipt;
@@ -128,7 +128,7 @@ namespace blockchain
             else
             {
                 cJSON *json = cJSON_Parse(result.Value());
-                free(result.Value());
+                delete[] result.Value();
                 Result<BlockInformation *> blockInformation = BlockInformation::Parse(json);
                 cJSON_Delete(json);
                 return blockInformation;
@@ -188,11 +188,11 @@ namespace blockchain
 
         double elapsed = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000000.0;
 
-        char *time_spent = (char *)malloc(50);
+        char *time_spent = new char[50];
         sprintf(time_spent, " %.6f seconds", elapsed);
 
         Log::m("Serialization time:", time_spent);
-        free(time_spent);
+        delete[] time_spent;
 
         Result<char *> result = MakeRequst("eth_sendRawTransaction", {cJSON_CreateString(parameter)});
         delete[] parameter;
@@ -208,36 +208,28 @@ namespace blockchain
                                          const BigNumber amount, const uint32_t gasLimit,
                                          const BigNumber *gasPrice, const ContractCall *contractCall) const
     {
-        Result<BigNumber> nonceResult = GetTransactionCount(from->GetAddress());
+        cJSON *callCJson = cJSON_CreateObject();
+        cJSON_AddStringToObject(callCJson, "from", from->GetAddress().AsString());
+        cJSON_AddStringToObject(callCJson, "to", to.AsString());
 
-        if (!nonceResult.HasValue())
+        if (contractCall != nullptr)
         {
-            return Result<BigNumber>::Err(-1, "Unable to retrieve nonce.");
+            char *dataAsHexString = (contractCall->AsData() | byte_array::hex_string) | char_string::add_hex_prefix;
+            cJSON_AddStringToObject(callCJson, "data", dataAsHexString);
+            delete []dataAsHexString;
         }
 
-        uint32_t nonce = nonceResult.Value().ToUInt32();
+        char *valueHex = (amount.Bytes() | byte_array::hex_string) | char_string::add_hex_prefix;
+        cJSON_AddStringToObject(callCJson, "value", valueHex);
+        delete []valueHex;
 
-        BigNumber gp(gasPrice);
-
-        if (gasPrice == nullptr)
-        {
-            Result<BigNumber> gasPriceResult = GetGasPrice();
-            if (!gasPriceResult.HasValue())
-            {
-                return Result<BigNumber>::Err(-41, "Unable to fetch gas price.");
-            }
-            gp = gasPriceResult.Value();
-        }
-
-        char *parameter = transactionFactory->GenerateSerializedData(EthereumTransactionProperties(nonce, gp, gasLimit, to, amount, (contractCall ? contractCall->AsData() : std::vector<uint8_t>()), id), from);
-        Result<char *> result = MakeRequst("eth_estimateGas", {cJSON_CreateString(parameter)});
-        delete[] parameter;
+        Result<char *> result = MakeRequst("eth_estimateGas", {callCJson});
 
         if (result.HasValue())
         {
-            Result<BigNumber> gasPrice(result.Value());
+            BigNumber gas(result.Value());
             delete[] result.Value();
-            return gasPrice;
+            return gas;
         }
         return Result<BigNumber>::Err(result);
     }

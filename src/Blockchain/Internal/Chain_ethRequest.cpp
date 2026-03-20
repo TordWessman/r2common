@@ -72,7 +72,7 @@ namespace blockchain
             const char *errorPtr = cJSON_GetErrorPtr();
             if (errorPtr != NULL)
             {
-                Result<char *>::Err(-2, "Unable to parse JSON due to unknown error");
+                return Result<char *>::Err(-2, "Unable to parse JSON due to unknown error");
             }
 
             return Result<char *>::Err(-2, errorPtr);
@@ -108,8 +108,10 @@ namespace blockchain
 
             if (resultJson != NULL)
             {
-                int code = cJSON_GetObjectItem(resultJson, "code")->valueint;
-                char *message = cJSON_GetObjectItem(resultJson, "message")->valuestring;
+                cJSON *codeItem = cJSON_GetObjectItem(resultJson, "code");
+                cJSON *messageItem = cJSON_GetObjectItem(resultJson, "message");
+                int code = codeItem != NULL ? codeItem->valueint : -1;
+                char *message = (messageItem != NULL && cJSON_IsString(messageItem)) ? messageItem->valuestring : (char *)"Unknown error";
                 Result<char *> result = Result<char *>::Err(code, message);
                 cJSON_Delete(response_json);
                 return result;

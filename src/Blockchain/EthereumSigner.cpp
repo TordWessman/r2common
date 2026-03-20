@@ -49,6 +49,10 @@ namespace blockchain
         {
             signature.push_back(result[i]);
         }
+        volatile uint8_t *vDigest = digest;
+        for (size_t i = 0; i < message->size(); i++) { vDigest[i] = 0; }
+        volatile uint8_t *vKey = privateKey;
+        for (size_t i = 0; i < key->size(); i++) { vKey[i] = 0; }
         return EthereumSignature(pby, signature);
     }
 
