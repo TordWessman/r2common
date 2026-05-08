@@ -56,26 +56,73 @@ namespace blockchain
         http.setConnectTimeout(ESPNetwork_CONNECTION_TIMEOUT);
 #endif
         http.setTimeout(ESPNetwork_CONNECTION_TIMEOUT);
-        if (certificate != nullptr) 
+        if (certificate != nullptr)
+        {
+            const char *certs[] = {certificate, nullptr};
+            initCertificates(certs);
+        }
+        else
+        {
+            initCertificates(nullptr);
+        }
+    }
+
+    ESPNetwork::ESPNetwork(const char **certificates, const bool printDebug) : printDebug(printDebug)
+    {
+        ntpServers = {ESPNetwork_NTP_SERVER1, ESPNetwork_NTP_SERVER2, ESPNetwork_NTP_SERVER3};
+#ifdef ESP32
+        http.setConnectTimeout(ESPNetwork_CONNECTION_TIMEOUT);
+#endif
+        http.setTimeout(ESPNetwork_CONNECTION_TIMEOUT);
+        initCertificates(certificates);
+    }
+
+    void ESPNetwork::initCertificates(const char **certificates)
+    {
+        bool hasCerts = certificates != nullptr && certificates[0] != nullptr;
+
+        if (hasCerts)
         {
 #ifdef ESP8266
             BearSSL::WiFiClientSecure *bearSSLClient = new BearSSL::WiFiClientSecure();
-            trustedCAs.append(certificate);
+            for (size_t i = 0; certificates[i] != nullptr; i++)
+            {
+                trustedCAs.append(certificates[i]);
+            }
             bearSSLClient->setTrustAnchors(&trustedCAs);
             client = bearSSLClient;
 #endif
 #ifdef ESP32
+            size_t totalLen = 0;
+            for (size_t i = 0; certificates[i] != nullptr; i++)
+            {
+                totalLen += strlen(certificates[i]);
+            }
+            concatenatedCerts = new char[totalLen + 1];
+            concatenatedCerts[0] = '\0';
+            for (size_t i = 0; certificates[i] != nullptr; i++)
+            {
+                strcat(concatenatedCerts, certificates[i]);
+            }
             client = new WiFiClientSecure();
-            ((WiFiClientSecure *)client)->setCACert(certificate);
+            ((WiFiClientSecure *)client)->setCACert(concatenatedCerts);
 #endif
             timeSyncRequired = true;
             caCertAdded = true;
         }
         else
         {
+#if defined(ESP32) && R2WEB3_HAS_CERT_BUNDLE
+            client = new WiFiClientSecure();
+            ((WiFiClientSecure *)client)->setCACertBundle(esp_crt_bundle_attach);
+            timeSyncRequired = true;
+            caCertAdded = true;
+            Log::m("Using Mozilla CA certificate bundle");
+#else
             client = new WiFiClient();
             timeSyncRequired = false;
             caCertAdded = false;
+#endif
         }
     }
 
@@ -116,7 +163,7 @@ namespace blockchain
 
         if (strncmp(url, "https", 5) == 0 && !caCertAdded)
         {
-            Log::e("Trying to initiate a https connection without a valid certificate. Instantiate ESPNetwork with a valid root certificate.");
+            Log::e("Trying to initiate a https connection without a valid certificate. Instantiate ESPNetwork with a root certificate or use Arduino-ESP32 v3.0+ for automatic CA bundle support.");
             return HttpResponse(-3);
         }
 

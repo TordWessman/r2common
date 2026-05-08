@@ -37,6 +37,12 @@
 #include <HTTPClient.h>
 #include <WiFiClientSecure.h>
 #include <WiFiClient.h>
+#if __has_include("esp_crt_bundle.h")
+#include "esp_crt_bundle.h"
+#define R2WEB3_HAS_CERT_BUNDLE 1
+#else
+#define R2WEB3_HAS_CERT_BUNDLE 0
+#endif
 #endif
 
 #include <vector>
@@ -64,12 +70,19 @@ namespace blockchain
         /// @return UTC timestamp (seconds since epoch), or 0 on failure
         static uint32_t GetUTCTimestamp(const char *ntpServer = ESPNetwork_NTP_SERVER1);
 
+        /// @brief Instantiate network client with multiple root certificates. Please note that `Restart` needs to be called if time sync is lost due to hibernation.
+        /// @param certificates Null-terminated array of PEM-encoded root certificates (e.g. {cert1, cert2, nullptr}).
+        ESPNetwork(const char **certificates, const bool printDebug = false);
+
         /// @brief Instantiate network client. Please note that `Restart` needs to be called if time sync is lost due to hibernation.
         /// @param certificate Optional root certificate.
         ESPNetwork(const char *certificate = nullptr, const bool printDebug = false);
 
         ~ESPNetwork()
         {
+#ifdef ESP32
+            delete[] concatenatedCerts;
+#endif
             delete client;
         }
 
@@ -94,8 +107,12 @@ namespace blockchain
 #ifdef ESP8266
         mutable BearSSL::X509List trustedCAs;
 #endif
+#ifdef ESP32
+        char *concatenatedCerts = nullptr;
+#endif
         bool caCertAdded;
         std::vector<const char*> ntpServers;
+        void initCertificates(const char **certificates);
         static bool SetClock(const char *ntpServer1 = nullptr, const char *ntpServer2 = nullptr, const char *ntpServer3 = nullptr);
     };
     
