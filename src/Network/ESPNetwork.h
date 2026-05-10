@@ -37,11 +37,13 @@
 #include <HTTPClient.h>
 #include <WiFiClientSecure.h>
 #include <WiFiClient.h>
+#ifndef R2WEB3_HAS_CERT_BUNDLE
 #if __has_include("esp_crt_bundle.h")
 #include "esp_crt_bundle.h"
 #define R2WEB3_HAS_CERT_BUNDLE 1
 #else
 #define R2WEB3_HAS_CERT_BUNDLE 0
+#endif
 #endif
 #endif
 

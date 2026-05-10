@@ -23,11 +23,11 @@
     ],
     "export": {
       "include": [
-        "src/*"
+        "src/*",
         "examples/*",
         "*.md",
         "*.properties",
-        "LICENSE",
+        "LICENSE"
       ],
       "exclude": [
         
@@ -43,7 +43,7 @@
         ],
         "srcFilter": 
         [
-          "+<*>",
+          "+<*>"
         ],
         "libCompatMode": "strict"
     },
