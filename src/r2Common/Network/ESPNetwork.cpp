@@ -27,11 +27,10 @@
 #include <Arduino.h>
 #include <string.h>
 
-#include "../../Shared/R2Web3Log.h"
+#include "../R2CommonLog.h"
 
 namespace r2common
 {
-    using namespace blockchain;
 
     uint32_t ESPNetwork::GetUTCTimestamp(const char *ntpServer)
     {
@@ -118,7 +117,7 @@ namespace r2common
             ((WiFiClientSecure *)client)->setCACertBundle(arduino_esp_crt_bundle_attach);
             timeSyncRequired = true;
             caCertAdded = true;
-            Log::m("Using Mozilla CA certificate bundle");
+            R2C_LOG("Using Mozilla CA certificate bundle");
 #else
             client = new WiFiClient();
             timeSyncRequired = false;
@@ -157,21 +156,21 @@ namespace r2common
         { 
             if (!Restart()) 
             {
-                Log::e("NTP time synchronization failed. Call `Restart` once network is connected.");
+                R2C_ERR("NTP time synchronization failed. Call `Restart` once network is connected.");
                 return HttpResponse(-2);
             }
         }
 
         if (strncmp(url, "https", 5) == 0 && !caCertAdded)
         {
-            Log::e("Trying to initiate a https connection without a valid certificate. Instantiate ESPNetwork with a root certificate or use Arduino-ESP32 v3.0+ for automatic CA bundle support.");
+            R2C_ERR("Trying to initiate a https connection without a valid certificate. Instantiate ESPNetwork with a root certificate or use Arduino-ESP32 v3.0+ for automatic CA bundle support.");
             return HttpResponse(-3);
         }
 
         if(printDebug)
         {
-            Log::m("Sending request:", url);
-            Log::m("Request body:", body);
+            R2C_LOG2("Sending request: ", url);
+            R2C_LOG2("Request body: ", body);
         }
 
         http.begin(*client, url);
@@ -181,18 +180,18 @@ namespace r2common
 
         if (httpResponseCode < 100)
         {
-            Log::e("Connection error with code: ", httpResponseCode);
+            R2C_ERR2("Connection error with code: ", httpResponseCode);
             return HttpResponse(httpResponseCode);
         }
         else if (httpResponseCode != HTTP_CODE_OK && printDebug)
         {
-            Log::e("Invalid response code: ", httpResponseCode);
-            if (printDebug) { Log::m(http.getString().c_str()); }
+            R2C_ERR2("Invalid response code: ", httpResponseCode);
+            if (printDebug) { R2C_LOG(http.getString().c_str()); }
         }
 
         String responseBody = http.getString();
 
-        if (printDebug) { Log::m("Response body:", responseBody.c_str()); }
+        if (printDebug) { R2C_LOG2("Response body: ", responseBody.c_str()); }
 
         char *responseData = new char[responseBody.length() + 2];
         responseData[responseBody.length() + 1] = '\0';
@@ -206,7 +205,7 @@ namespace r2common
     {
         configTime(0, 0, ntpServer1, ntpServer2, ntpServer3);
 
-        Log::m("Waiting for NTP time sync: ");
+        R2C_LOG("Waiting for NTP time sync...");
         time_t now = time(nullptr);
         uint16_t retryCount = 0;
 
@@ -218,14 +217,13 @@ namespace r2common
 
         if (retryCount >= ESPNetwork_NTP_LOOP_RETRIES) 
         {
-            Log::e("Unable to fetch NPT time");
+            R2C_ERR("Unable to fetch NPT time");
             return false;
         }
 
         struct tm timeinfo;
         gmtime_r(&now, &timeinfo);
-        Log::m("GMT time: ");
-        Log::m(asctime(&timeinfo));
+        R2C_LOG2("GMT time: ", asctime(&timeinfo));
         return true;
     }
 }

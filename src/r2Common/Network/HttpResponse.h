@@ -26,11 +26,10 @@
 #define __HTTP_RESPONSE_H__
 
 #include <cstring>
-#include "../../Shared/Common.h"
+#include "../Result.h"
 
 namespace r2common
 {
-    using namespace blockchain;
     #define HTTP_OK 200
 
     /// @brief Response object for HTTP requests.
@@ -52,7 +51,7 @@ namespace r2common
             status(status),
             responseLength(strlen(responseBody) != 0 ? strlen(responseBody) + 1 : 0)
         {
-            body = responseBody | char_string::copy;
+            body = _copyString(responseBody);
         }
 
         ~HttpResponse()
@@ -71,7 +70,7 @@ namespace r2common
 
                 if (other.body != nullptr)
                 {
-                    body = other.body | char_string::retain;
+                    body = _copyString(other.body);
                 }
                 else
                 {
@@ -89,7 +88,7 @@ namespace r2common
             {
                 if (other.body != nullptr)
                 {
-                    body = other.body | char_string::retain;
+                    body = _copyString(other.body);
                 }
                 else
                 {
@@ -112,6 +111,15 @@ namespace r2common
         
     private:
         char *body;
+
+        static char *_copyString(const char *v)
+        {
+            if (v == nullptr) { return nullptr; }
+            char *result = new char[strlen(v) + 1];
+            memcpy(result, v, strlen(v));
+            result[strlen(v)] = '\0';
+            return result;
+        }
     };
 }
 #endif
