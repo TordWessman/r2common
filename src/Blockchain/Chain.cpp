@@ -24,7 +24,7 @@
 
 #include "Chain.h"
 #include "../r2Common/Network/HttpRequest.h"
-#include "../Shared/R2Web3Log.h"
+#include "../r2Common/R2Logger.h"
 #include "Internal/Chain_ethRequest.h"
 
 #include <time.h>
@@ -45,7 +45,7 @@ namespace blockchain
             }
             else
             {
-                Log::e("Unable to fetch chainId: ", chainIdResult.ErrorMessage());
+                r2common::R2Logger::e("Unable to fetch chainId: ", chainIdResult.ErrorMessage());
                 return false;
             }
         }
@@ -191,7 +191,7 @@ namespace blockchain
         char *time_spent = new char[50];
         sprintf(time_spent, " %.6f seconds", elapsed);
 
-        Log::m("Serialization time:", time_spent);
+        r2common::R2Logger::m("Serialization time:", time_spent);
         delete[] time_spent;
 
         Result<char *> result = MakeRequst("eth_sendRawTransaction", {cJSON_CreateString(parameter)});

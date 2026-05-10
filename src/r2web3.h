@@ -26,7 +26,7 @@
 #define __R2_WEB3_H__
 
 #include "Shared/Common.h"
-#include "Shared/R2Web3Log.h"
+#include "r2Common/R2Logger.h"
 #include "Shared/BigNumber.h"
 #ifdef ARDUINO
 #include "r2Common/Network/ESPNetwork.h"

@@ -24,7 +24,7 @@
 
 #include "../../r2Common/Network/HttpResponse.h"
 #include "../../r2Common/Network/HttpRequest.h"
-#include "../../Shared/R2Web3Log.h"
+#include "../../r2Common/R2Logger.h"
 #include "../../Shared/Common.h"
 #include "Chain_ethRequest.h"
 
@@ -35,7 +35,7 @@ namespace blockchain
 
     char *BaseJsonBody(const char *method, cJSON *params)
     {
-        Log::m("Preparing request:", method);
+        r2common::R2Logger::m("Preparing request:", method);
         cJSON *json = cJSON_CreateObject();
         cJSON_AddStringToObject(json, "method", method);
         cJSON_AddNumberToObject(json, "id", 1);
@@ -121,7 +121,7 @@ namespace blockchain
             }
         }
 
-        Log::e("JSON ERROR", cJSON_Print(response_json));
+        r2common::R2Logger::e("JSON ERROR", cJSON_Print(response_json));
         cJSON_Delete(response_json);
         return Result<char *>::Err(-3, "Invalid JSON");
     }
