@@ -7,6 +7,7 @@
 #include <r2web3.h>
 
 using namespace blockchain;
+using namespace r2common;
 
 #define SSID "<ssid>"
 #define WIFI_PASSWORD "<password>"

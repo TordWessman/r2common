@@ -30,7 +30,7 @@
 #include "NetworkFacade.h"
 #include "HttpResponse.h"
 
-namespace blockchain
+namespace r2common
 {
     /// @brief Standard, non-micro controller network client.
     class CurlNetwork : public NetworkFacade

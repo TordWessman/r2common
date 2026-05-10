@@ -27,7 +27,7 @@
 
 #include "HttpResponse.h"
 
-namespace blockchain
+namespace r2common
 {
     /// @brief Interface for network request. Must be overloaded by concrete platform-specific implementations.
     class NetworkFacade

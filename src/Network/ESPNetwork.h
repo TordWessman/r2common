@@ -57,7 +57,7 @@
 #define ESPNetwork_NTP_LOOP_RETRIES 50
 #define ESPNetwork_CONNECTION_TIMEOUT 1000 * 10
 
-namespace blockchain
+namespace r2common
 {
     /// @brief Default network client for ESP8266 devices
     class ESPNetwork : public NetworkFacade

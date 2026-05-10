@@ -29,8 +29,9 @@
 
 #include "../Shared/R2Web3Log.h"
 
-namespace blockchain
+namespace r2common
 {
+    using namespace blockchain;
 
     uint32_t ESPNetwork::GetUTCTimestamp(const char *ntpServer)
     {

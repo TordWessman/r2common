@@ -28,7 +28,7 @@
 #include "HttpResponse.h"
 #include "../Shared/Common.h"
 
-namespace blockchain
+namespace r2common
 {
     CurlNetwork::CurlNetwork(const bool printDebug) : printDebug(printDebug)
     {

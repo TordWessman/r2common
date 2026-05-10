@@ -30,6 +30,9 @@
 
 namespace blockchain
 {
+    using r2common::HttpRequest;
+    using r2common::HttpResponse;
+
     char *BaseJsonBody(const char *method, cJSON *params)
     {
         Log::m("Preparing request:", method);

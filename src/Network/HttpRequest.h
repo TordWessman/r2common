@@ -28,7 +28,7 @@
 #include "NetworkFacade.h"
 #include "HttpResponse.h"
 
-namespace blockchain
+namespace r2common
 {
     /// @brief Represents an object capable of making network requests.
     class HttpRequest

@@ -28,8 +28,9 @@
 #include <cstring>
 #include "../Shared/Common.h"
 
-namespace blockchain
+namespace r2common
 {
+    using namespace blockchain;
     #define HTTP_OK 200
 
     /// @brief Response object for HTTP requests.

@@ -25,7 +25,7 @@
 #include "HttpRequest.h"
 #include "HttpResponse.h"
 
-namespace blockchain
+namespace r2common
 {
     HttpResponse HttpRequest::SendRequest(const char *url) const
     {

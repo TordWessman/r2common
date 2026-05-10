@@ -41,6 +41,9 @@
 
 namespace blockchain
 {
+    using r2common::NetworkFacade;
+    using r2common::HttpResponse;
+
     /// @brief Interface to a EVM-compatible blockchain.
     class Chain
     {

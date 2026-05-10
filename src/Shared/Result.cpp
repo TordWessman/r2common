@@ -22,19 +22,4 @@
  * SOFTWARE.
  */
 
-#ifndef __CHAIN__ETH_REQUEST_H__
-#define __CHAIN__ETH_REQUEST_H__
-
-#include "../../Shared/Common.h"
-#include "../../Shared/cJSON.h"
-#include "../../Network/NetworkFacade.h"
-
-namespace blockchain
-{
-    using r2common::NetworkFacade;
-
-    char *BaseJsonBody(const char *method, cJSON *params);
-    Result<char *> DoRequestYo(const NetworkFacade *network, const char *url, const char *request_body);
-}
-
-#endif
+#include "Result.h"
