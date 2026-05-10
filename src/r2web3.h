@@ -29,11 +29,11 @@
 #include "Shared/R2Web3Log.h"
 #include "Shared/BigNumber.h"
 #ifdef ARDUINO
-#include "Network/ESPNetwork.h"
+#include "r2Common/Network/ESPNetwork.h"
 #else
-#include "Network/CurlNetwork.h"
+#include "r2Common/Network/CurlNetwork.h"
 #endif
-#include "Network/NetworkFacade.h"
+#include "r2Common/Network/NetworkFacade.h"
 #include "Blockchain/Address.h"
 #include "Blockchain/Encodable.h"
 #include "Blockchain/Chain.h"

@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#include "../../Network/HttpResponse.h"
-#include "../../Network/HttpRequest.h"
+#include "../../r2Common/Network/HttpResponse.h"
+#include "../../r2Common/Network/HttpRequest.h"
 #include "../../Shared/R2Web3Log.h"
 #include "../../Shared/Common.h"
 #include "Chain_ethRequest.h"

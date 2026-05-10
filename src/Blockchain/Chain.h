@@ -32,7 +32,7 @@
 #include "../Shared/cJSON.h"
 #include "../Shared/BigNumber.h"
 #include "../Shared/R2Web3Log.h"
-#include "../Network/NetworkFacade.h"
+#include "../r2Common/Network/NetworkFacade.h"
 #include "Account.h"
 #include "TransactionResponse.h"
 #include "Contract.h"

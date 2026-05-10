@@ -38,7 +38,7 @@
     #define THROW(message) throw std::runtime_error(message)
 #endif
 
-#include "Result.h"
+#include "../r2Common/Result.h"
 
 namespace blockchain
 {

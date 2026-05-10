@@ -26,7 +26,7 @@
 
 #include "CurlNetwork.h"
 #include "HttpResponse.h"
-#include "../Shared/Common.h"
+#include "../../Shared/Common.h"
 
 namespace r2common
 {

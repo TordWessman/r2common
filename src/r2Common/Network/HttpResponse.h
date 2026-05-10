@@ -26,7 +26,7 @@
 #define __HTTP_RESPONSE_H__
 
 #include <cstring>
-#include "../Shared/Common.h"
+#include "../../Shared/Common.h"
 
 namespace r2common
 {

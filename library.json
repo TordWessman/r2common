@@ -39,7 +39,8 @@
             "-I src",
             "-I src/Shared",
             "-I src/Blockchain",
-            "-I src/Network"
+            "-I src/r2Common",
+            "-I src/r2Common/Network"
         ],
         "srcFilter": 
         [
