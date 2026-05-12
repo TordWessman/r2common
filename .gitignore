@@ -1,3 +1,5 @@
+.claude
+
 # Prerequisites
 *.d
 
@@ -33,3 +35,6 @@
 
 # Visual studio code
 .vscode
+
+# CMake
+build/

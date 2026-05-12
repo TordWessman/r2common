@@ -48,5 +48,11 @@
         ],
         "libCompatMode": "strict"
     },
-    "libLDFMode": "deep+"
+    "libLDFMode": "deep+",
+    "dependencies": [
+      {
+        "name": "r2common",
+        "version": "https://github.com/TordWessman/r2common.git"
+      }
+    ]
   }
