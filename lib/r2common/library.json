@@ -13,21 +13,22 @@
             "url": "https://axelit.se/"
         }
     ],
-    "includeDir": ".",
-    "srcDir": ".",
-    "frameworks": "arduino",
+    "includeDir": "src",
+    "srcDir": "src",
+    "frameworks": "*",
     "platforms": [
         "espressif8266",
         "espressif32",
-        "atmelsam"
+        "atmelsam",
+        "native"
     ],
     "build": {
         "flags": [
-            "-I .",
-            "-I Network"
+            "-I src",
+            "-I src/Network"
         ],
         "srcFilter": ["+<*>"],
-        "libCompatMode": "strict"
+        "libCompatMode": "off"
     },
     "libLDFMode": "deep+"
 }
