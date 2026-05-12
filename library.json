@@ -1,58 +1,47 @@
 {
     "name": "r2web3",
-    "description": "A simple Web3 client for microcontrollers",
-    "repository": {
-      "type": "git",
-      "url": "https://github.com/TordWessman/r2web3"
-    },
     "version": "0.0.1",
+    "description": "A simple Web3 client for microcontrollers",
+    "keywords": ["web3", "ethereum", "blockchain", "esp32", "esp8266", "json-rpc", "smart-contract"],
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/TordWessman/r2web3"
+    },
     "authors": [
-      {
-        "name": "TordWessman",
-        "email": "tord@axelit.se",
-        "url": "https://axelit.se/"
-      }
+        {
+            "name": "TordWessman",
+            "email": "tord@axelit.se",
+            "url": "https://axelit.se/"
+        }
     ],
     "includeDir": "src",
     "srcDir": "src",
-    "frameworks": "arduino",
+    "frameworks": ["arduino"],
     "platforms": [
-      "espressif8266",
-      "espressif32",
-      "atmelsam"
+        "espressif8266",
+        "espressif32",
+        "atmelsam"
     ],
     "export": {
-      "include": [
-        "src/*",
-        "examples/*",
-        "*.md",
-        "*.properties",
-        "LICENSE"
-      ],
-      "exclude": [
-        
-      ]
+        "include": [
+            "src/*",
+            "examples/*",
+            "*.md",
+            "*.properties",
+            "LICENSE"
+        ]
     },
     "build": {
-        "flags":
-        [
+        "flags": [
             "-I src",
             "-I src/Shared",
             "-I src/Blockchain",
             "-I src/r2Common",
             "-I src/r2Common/Network"
         ],
-        "srcFilter": 
-        [
-          "+<*>"
-        ],
+        "srcFilter": ["+<*>"],
         "libCompatMode": "strict"
     },
-    "libLDFMode": "deep+",
-    "dependencies": [
-      {
-        "name": "r2common",
-        "version": "https://github.com/TordWessman/r2common.git"
-      }
-    ]
-  }
+    "libLDFMode": "deep+"
+}
